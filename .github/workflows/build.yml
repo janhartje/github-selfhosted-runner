@@ -14,7 +14,7 @@ jobs:
     name: Build and Push
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: 'ghcr.io/janhartje/github-selfhosted-runner'
+      IMAGE_NAME: 'ghcr.io/${{ github.repository }}'
 
     steps:
       - name: Checkout
