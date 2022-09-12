@@ -27,18 +27,12 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Login Docker
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-      - name: Pull Image
-        run: |
-          docker pull ghcr.io/${{ github.repository }}:$(git rev-parse --short HEAD)
-
-      - name: Tag Image
-        run: |
-          docker tag ghcr.io/${{ github.repository }}:$(git rev-parse --short HEAD)  ghcr.io/${{ github.repository }}:${{ steps.get_release.outputs.tag_name }}
-
-      - name: Push Image
-        run: |
-          docker push ghcr.io/${{ github.repository }}:${{ steps.get_release.outputs.tag_name }}
+      - name: Retag to latest
+        uses: koraykoska/retag-docker-image@0.2.4
+        with:
+          registry: some.registry.com
+          name: my-awesome-docker-image/my-package
+          old_tag: ghcr.io/${{ github.repository }}:$(git rev-parse --short HEAD)
+          new_tag: ghcr.io/${{ github.repository }}:${{ steps.get_release.outputs.tag_name }}
+          username: github
+          password: ${{ secrets.GITHUB_TOKEN }}
