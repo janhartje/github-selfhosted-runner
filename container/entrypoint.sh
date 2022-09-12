@@ -3,6 +3,7 @@
 ./config.sh \
     --token ${RUNNER_TOKEN} \
     --url ${GITHUB_RUNNER_URL} \
+    --ephemeral
 
 remove() {
     ./config.sh remove --unattended --token "${RUNNER_TOKEN}"
