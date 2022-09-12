@@ -12,7 +12,6 @@ jobs:
   retag:
     name: Retag and Push
     runs-on: ubuntu-latest
-    environment: dev
     env:
       IMAGE_NAME: 'ghcr.io/${{ github.repository }}'
     steps:
