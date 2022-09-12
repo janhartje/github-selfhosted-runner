@@ -2,6 +2,13 @@
 
 This is a self hosted github action runner based on a Container
 
+# How to Run it
+Create a .env Filre based on the .env.example File or set the environment variables in the docker run command
+
+```
+docker run ghcr.io/janhartje/github-selfhosted-runner:latest --env-file .env 
+```
+
 # Demo Deployment in Kubernetes
 
 # Deployment
