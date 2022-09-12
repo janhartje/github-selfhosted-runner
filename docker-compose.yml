@@ -1,0 +1,6 @@
+version: '2'
+
+services:
+  webservice:
+    build: .
+    env_file: .env
