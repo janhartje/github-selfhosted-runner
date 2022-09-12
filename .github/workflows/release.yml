@@ -1,0 +1,45 @@
+name: Create Release Tag
+
+on:
+  release:
+    types: [released]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  retag:
+    name: Retag and Push
+    runs-on: ubuntu-latest
+    environment: dev
+    env:
+      IMAGE_NAME: 'ghcr.io/${{ github.repository }}'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get release
+        id: get_release
+        uses: bruceadams/get-release@v1.2.3
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Login Docker
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Pull Image
+        run: |
+          docker pull ghcr.io/${{ github.repository }}:$(git rev-parse --short HEAD)
+
+      - name: Tag Image
+        run: |
+          docker tag ghcr.io/${{ github.repository }}:$(git rev-parse --short HEAD)  ghcr.io/${{ github.repository }}:${{ steps.get_release.outputs.tag_name }}
+
+      - name: Push Image
+        run: |
+          docker push ghcr.io/${{ github.repository }}:${{ steps.get_release.outputs.tag_name }}
