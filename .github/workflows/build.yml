@@ -42,7 +42,7 @@ jobs:
         run: |
           echo "Building $IMAGE_NAME:$(git rev-parse --short HEAD)"
           docker buildx create --use
-          docker buildx build . \
+          docker buildx build container \
             --cache-from=type=local,src=/tmp/.buildx-cache \
             --cache-to=type=local,dest=/tmp/.buildx-cache-new \
             --push \
